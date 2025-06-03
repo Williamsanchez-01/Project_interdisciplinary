@@ -1,0 +1,71 @@
+-- CRIAÇÃO DAS TABELAS SIMPLIFICADAS
+
+CREATE TABLE Categoria (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Fornecedor (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(18),
+    telefone VARCHAR(20),
+    email VARCHAR(100)
+);
+
+CREATE TABLE Produto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    id_categoria INT,
+    quantidade_estoque INT DEFAULT 0,
+    preco_unitario DECIMAL(10,2),
+    id_fornecedor INT,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria(id),
+    FOREIGN KEY (id_fornecedor) REFERENCES Fornecedor(id)
+);
+
+CREATE TABLE EntradaEstoque (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_produto INT,
+    quantidade INT NOT NULL,
+    data_entrada DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_produto) REFERENCES Produto(id)
+);
+
+CREATE TABLE SaidaEstoque (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_produto INT,
+    quantidade INT NOT NULL,
+    data_saida DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_produto) REFERENCES Produto(id)
+);
+
+-- INSERÇÃO DE DADOS EXEMPLO
+
+-- Categorias
+INSERT INTO Categoria (nome) VALUES 
+('Cimento'), 
+('Areia'), 
+('Tijolos'), 
+('Tubos'), 
+('Ferragens');
+
+-- Fornecedores
+INSERT INTO Fornecedor (nome, cnpj, telefone, email) VALUES
+('Construfácil LTDA', '12.345.678/0001-90', '11987654321', 'contato@construfacil.com'),
+('Materiais União', '98.765.432/0001-10', '1187654321', 'vendas@uniaomateriais.com');
+
+-- Produtos
+INSERT INTO Produto (nome, id_categoria, quantidade_estoque, preco_unitario, id_fornecedor) VALUES
+('Cimento Votoran 50kg', 1, 100, 32.50, 1),
+('Areia Média - m³', 2, 50, 70.00, 2),
+('Tijolo 6 furos', 3, 1000, 0.50, 1);
+
+-- Entradas de Estoque
+INSERT INTO EntradaEstoque (id_produto, quantidade) VALUES
+(1, 20),
+(2, 10);
+
+-- Saídas de Estoque
+INSERT INTO SaidaEstoque (id_produto, quantidade) VALUES
+(3, 100);
