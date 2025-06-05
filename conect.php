@@ -1,31 +1,20 @@
 <?php
-// Conexão com banco de dados
-$host = 'localhost';
-$db = 'estoque';
-$user = 'root';
-$pass = '';
+// Configurações do banco de dados
+$host = 'localhost';           // Ou IP do servidor MySQL
+$dbname = 'nome_do_banco';     // Substitua pelo nome do seu banco
+$username = 'seu_usuario';     // Substitua pelo usuário do banco
+$password = 'sua_senha';       // Substitua pela senha do banco
 
-$conn = new mysqli($host, $user, $pass, $db);
+try {
+    // Criar uma conexão PDO com MySQL
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
 
-if ($conn->connect_error) {
-  die('Erro de conexão: ' . $conn->connect_error);
+    // Definir o modo de erro para exceções
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    echo "Conexão com o banco de dados MySQL realizada com sucesso!";
+} catch (PDOException $e) {
+    echo "Erro ao conectar ao banco de dados: " . $e->getMessage();
+    exit;
 }
-
-$sql = "SELECT p.nome, c.nome AS categoria, p.quantidade_estoque AS estoque, 
-               p.preco_unitario AS preco, f.nome AS fornecedor
-        FROM Produto p
-        JOIN Categoria c ON p.id_categoria = c.id
-        JOIN Fornecedor f ON p.id_fornecedor = f.id";
-
-$result = $conn->query($sql);
-$produtos = [];
-
-if ($result->num_rows > 0) {
-  while ($row = $result->fetch_assoc()) {
-    $produtos[] = $row;
-  }
-}
-$conn->close();
-header('Content-Type: application/json');
-echo json_encode($produtos);
 ?>
