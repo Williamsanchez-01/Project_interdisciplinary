@@ -1,12 +1,13 @@
 <?php
 // Configurações do banco
-$host = 'localhost';
-$dbname = 'construcao';
-$user = 'mysql';
-$pass = 'root';
+// Configurações do banco de dados
+$host = 'localhost';           // Ou IP do servidor MySQL
+$dbname = 'construcao';     // Substitua pelo nome do seu banco
+$username = 'root';     // Substitua pelo usuário do banco
+$password = 'root';       // Substitua pela senha do banco
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",  $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Dados recebidos do POST
