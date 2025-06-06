@@ -1,10 +1,8 @@
 <?php
-// Configurações do banco
-// Configurações do banco de dados
-$host = 'localhost';           // Ou IP do servidor MySQL
-$dbname = 'construcao';     // Substitua pelo nome do seu banco
-$username = 'root';     // Substitua pelo usuário do banco
-$password = 'root';       // Substitua pela senha do banco
+$host = 'localhost';          
+$dbname = 'construcao';     
+$username = 'root';     
+$password = 'root';       
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",  $username, $password);

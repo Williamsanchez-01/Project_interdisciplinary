@@ -1,16 +1,14 @@
 <?php
-// Configurações do banco de dados
-$host = 'localhost';           // Ou IP do servidor MySQL
-$dbname = 'construcao';     // Substitua pelo nome do seu banco
-$username = 'root';     // Substitua pelo usuário do banco
-$password = 'root';       // Substitua pela senha do banco
+$host = 'localhost';           
+$dbname = 'construcao';     
+$username = 'root';     
+$password = 'root';       
 
 try {
     // Criar uma conexão PDO com MySQL
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
 
-    // Definir o modo de erro para exceções
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     echo "Conexão com o banco de dados MySQL realizada com sucesso!";
 } catch (PDOException $e) {
