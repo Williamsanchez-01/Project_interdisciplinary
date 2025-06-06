@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Entradas de Estoque - Depósito</title>
+  <link rel="stylesheet" href="art.css" />
+</head>
+<body>
+  <header>
+    <h1>Depósito de Materiais de Construção</h1>
+  </header>
+
+  <nav>
+    <a href="screen.html">Produtos</a>
+    <a href="entradas_registradas.html" class="ativo">Entradas</a>
+    <a href="saidas.html">Saídas</a>
+    <a href="fornecedores.html">Fornecedores</a>
+  </nav>
+
+  <div class="container">
+    <section id="entradas">
+      <h2>Histórico de Entradas no Estoque</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Data</th>
+            <th>Fornecedor</th>
+          </tr>
+        </thead>
+        <tbody id="tabela_entradas">
+          <tr><td colspan="4" style="text-align:center;">Carregando entradas...</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    function carregarEntradas() {
+      const tbody = document.getElementById("tabela_entradas");
+      const entradas = JSON.parse(localStorage.getItem("entradasEstoque")) || [];
+
+      if (entradas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Nenhuma entrada registrada</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      entradas.forEach(({ nome, quantidade, data, fornecedor }) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${nome}</td>
+          <td>${quantidade}</td>
+          <td>${data}</td>
+          <td>${fornecedor}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", carregarEntradas);
+  </script>
+</body>
+</html>
