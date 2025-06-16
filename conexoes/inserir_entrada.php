@@ -1,36 +1,49 @@
 <?php
-$host = 'localhost';          
-$dbname = 'construcao';     
-$username = 'root';     
-$password = 'root';       
+$host = 'localhost';
+$dbname = 'construcao';
+$username = 'root';
+$password = 'root';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",  $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Criar conexão
+$conn = new mysqli($host, $username, $password, $dbname);
 
-    $id_produto = $_POST['id_produto'] ?? null;
-    $quantidade = $_POST['quantidade'] ?? null;
-
-    if (!$id_produto || !$quantidade || $quantidade <= 0) {
-        echo "Erro: Produto e quantidade válidos são obrigatórios.";
-        exit;
-    }
-
-    // Insere na tabela entradas_estoque
-    $sql = "INSERT INTO entradas_estoque (id_produto, quantidade) VALUES (:id_produto, :quantidade)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id_produto', $id_produto, PDO::PARAM_INT);
-    $stmt->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Atualiza o estoque do produto
-    $sqlUpdate = "UPDATE produtos SET estoque = estoque + :quantidade WHERE id_produto = :id_produto";
-    $stmtUpdate = $pdo->prepare($sqlUpdate);
-    $stmtUpdate->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
-    $stmtUpdate->bindValue(':id_produto', $id_produto, PDO::PARAM_INT);
-    $stmtUpdate->execute();
-
-    echo "Entrada registrada e estoque atualizado com sucesso!";
-} catch (PDOException $e) {
-    echo "Erro ao registrar entrada: " . $e->getMessage();
+// Verificar conexão
+if ($conn->connect_error) {
+    die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
+
+// Obter dados do POST
+$id_produto = $_POST['id_produto'] ?? null;
+$quantidade = $_POST['quantidade'] ?? null;
+
+if (!$id_produto || !$quantidade || $quantidade <= 0) {
+    echo "Erro: Produto e quantidade válidos são obrigatórios.";
+    exit;
+}
+
+
+// Inserir na tabela entradas_estoque
+$stmt = $conn->prepare("INSERT INTO entradas_estoque (id_produto, quantidade) VALUES (?, ?)");
+$stmt->bind_param("ii", $id_produto, $quantidade);
+
+if (!$stmt->execute()) {
+    echo "Erro ao inserir entrada no estoque: " . $stmt->error;
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+$stmt->close();
+
+// Atualizar o estoque do produto
+$stmtUpdate = $conn->prepare("UPDATE produtos SET estoque = estoque + ? WHERE id_produto = ?");
+$stmtUpdate->bind_param("ii", $quantidade, $id_produto);
+
+if (!$stmtUpdate->execute()) {
+    echo "Erro ao atualizar estoque: " . $stmtUpdate->error;
+} else {
+    echo "Entrada registrada e estoque atualizado com sucesso!";
+}
+
+$stmtUpdate->close();
+$conn->close();
+?>

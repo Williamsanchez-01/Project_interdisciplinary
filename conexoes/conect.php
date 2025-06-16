@@ -1,18 +1,16 @@
 <?php
-$host = 'localhost';           
-$dbname = 'construcao';     
-$username = 'root';     
-$password = 'root';       
+$host = 'localhost';
+$dbname = 'construcao';
+$username = 'root';
+$password = 'root';
 
-try {
-    // Criar uma conexão PDO com MySQL
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+$conn = new mysqli($host, $username, $password, $dbname);
 
-     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    echo "Conexão com o banco de dados MySQL realizada com sucesso!";
-} catch (PDOException $e) {
-    echo "Erro ao conectar ao banco de dados: " . $e->getMessage();
-    exit;
+if ($conn->connect_error) {
+    die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
+
+echo "Conexão com o banco de dados MySQL realizada com sucesso!";
+
+$conn->close();
 ?>

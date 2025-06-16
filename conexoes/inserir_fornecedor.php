@@ -1,36 +1,46 @@
 <?php
+$host = 'localhost';
+$dbname = 'construcao';
+$username = 'root';
+$password = 'root';
 
+// Criar conexão
+$conn = new mysqli($host, $username, $password, $dbname);
 
-$host = 'localhost';           
-$dbname = 'construcao';     
-$username = 'root';     
-$password = 'root';       
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8",  $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Dados recebidos do POST
-    $nome = $_POST['nome'] ?? '';
-    $cnpj = $_POST['cnpj'] ?? '';
-    $telefone = $_POST['telefone'] ?? null;
-    $email = $_POST['email'] ?? null;
-
-    if (empty($nome) || empty($cnpj)) {
-        echo "Erro: nome e CNPJ são obrigatórios.";
-        exit;
-    }
-
-    $sql = "INSERT INTO fornecedores (nome, cnpj, telefone, email) VALUES (:nome, :cnpj, :telefone, :email)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':nome', $nome);
-    $stmt->bindValue(':cnpj', $cnpj);
-    $stmt->bindValue(':telefone', $telefone);
-    $stmt->bindValue(':email', $email);
-
-    $stmt->execute();
-
-    echo "Fornecedor '$nome' inserido com sucesso!";
-} catch (PDOException $e) {
-    echo "Erro ao inserir fornecedor: " . $e->getMessage();
+// Verificar conexão
+if ($conn->connect_error) {
+    die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
+
+// Dados recebidos do POST
+$nome = $_POST['nome'] ?? '';
+$cnpj = $_POST['cnpj'] ?? '';
+$telefone = $_POST['telefone'] ?? null;
+$email = $_POST['email'] ?? null;
+
+// Verificação de campos obrigatórios
+if (empty($nome) || empty($cnpj)) {
+    echo "Erro: nome e CNPJ são obrigatórios.";
+    exit;
+}
+
+// Inserir fornecedor
+$stmt = $conn->prepare("INSERT INTO fornecedores (nome, cnpj, telefone, email) VALUES (?, ?, ?, ?)");
+if (!$stmt) {
+    die("Erro na preparação da consulta: " . $conn->error);
+}
+
+// Associar parâmetros
+$stmt->bind_param("ssss", $nome, $cnpj, $telefone, $email);
+
+// Executar e verificar
+if ($stmt->execute()) {
+    echo "Fornecedor '$nome' inserido com sucesso!";
+} else {
+    echo "Erro ao inserir fornecedor: " . $stmt->error;
+}
+
+// Fechar recursos
+$stmt->close();
+$conn->close();
+?>
