@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'construcao';
+$dbname = 'deposito_material_construcao';
 $username = 'root';
 $password = 'root';
 
@@ -12,5 +12,4 @@ if ($conn->connect_error) {
 
 echo "Conexão com o banco de dados MySQL realizada com sucesso!";
 
-$conn->close();
 ?>

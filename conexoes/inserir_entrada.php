@@ -1,8 +1,5 @@
 <?php
-$host = 'localhost';
-$dbname = 'construcao';
-$username = 'root';
-$password = 'root';
+include 'conect.php';
 
 // Criar conexão
 $conn = new mysqli($host, $username, $password, $dbname);
@@ -45,5 +42,5 @@ if (!$stmtUpdate->execute()) {
 }
 
 $stmtUpdate->close();
-$conn->close();
+
 ?>

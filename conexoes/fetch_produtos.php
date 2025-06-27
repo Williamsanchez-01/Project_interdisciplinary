@@ -1,5 +1,5 @@
 <?php
-include './conect.php';
+include 'conect.php';
 
 $select = "SELECT * FROM produtos";
 

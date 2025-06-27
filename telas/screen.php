@@ -23,17 +23,23 @@
       <h2>Produtos</h2>
       <div class="form-group">
         <label for="produto_info">Escolha um produto</label>
-        <select id="produto_info" onchange="mostrarDetalhesProduto()">
-          <option value="">Selecione um produto</option >
+        <select id="produto_info" >
+          <option value="">Selecione um prodDuto</option >
+          
+          
           <?php
-          include './conexoes/fetch_produtos.php';
+          include '../conexoes/fetch_produtos.php';
           if ($results->num_rows > 0) {
             while ($row = $results->fetch_assoc()){
               echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
             }
+          
+          }
+          else{
+
+            echo "<script> alert('olha ai rapaz'); </script>";
           }
           ?>
-        
       </select>
       </div>
       <table id="tabela_produto_info">
@@ -48,7 +54,11 @@
         </thead>
         <tbody id="detalhes_produto">
           <tr>
-            <td colspan="5" style="text-align:center">Selecione um produto para ver os detalhes</td>
+            <td id = Nome  ></td>
+            <td id = Categoria ></td>
+            <td id = Estoque></td>
+            <td id = Preço></td>
+            <td id = Fornecedor></td>
           </tr>
         </tbody>
       </table>
@@ -56,10 +66,26 @@
 
     <section id="entradas">
       <h2>Entradas de Estoque</h2>
-      <form action="inserir_entrada.php" method="post">
+      <form action="../conexoes/inserir_entrada.php" method="post">
         <div class="form-group">
           <label for="produto">Produto</label>
-          <select id="produto" name="id_produto"></select>
+          <select id="produto_entrada" name="id_produto">
+            <option value=""></option>
+
+          <?php
+          include '../conexoes/fetch_produtos.php';
+          if ($results->num_rows > 0) {
+            while ($row = $results->fetch_assoc()){
+              echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+            }
+          }
+          else{
+            echo "<script> alert('olha ai rapaz'); </script>";
+          }
+          ?>
+          </select>
+        
+        
         </div>
         <div class="form-group">
           <label for="quantidade">Quantidade</label>
@@ -71,10 +97,23 @@
 
     <section id="saidas">
       <h2>Saídas de Estoque</h2>
-      <form action="inserir_saida.php" method="post">
+      <form action="../conexoes/inserir_saida.php" method="post">
         <div class="form-group">
           <label for="produto_saida">Produto</label>
-          <select id="produto_saida" name="id_produto"></select>
+          <select id="produto_saida" name="id_produto">
+            <option value=""></option>
+            <?php
+            include '../conexoes/fetch_produtos.php';
+            if ($results->num_rows > 0) {
+              while ($row = $results->fetch_assoc()){
+                echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+              }
+            }
+            else{
+              echo "<script> alert('olha ai rapaz'); </script>";
+            }
+            ?>
+          </select>
         </div>
         <div class="form-group">
           <label for="quantidade_saida">Quantidade</label>
@@ -84,48 +123,7 @@
       </form>
     </section>
 
-    <section id="fornecedores">
-      <h2>Fornecedores</h2>
-      <form action="inserir_fornecedor.php" method="post">
-        <div class="form-group">
-          <label for="nome_fornecedor">Nome</label>
-          <input type="text" id="nome_fornecedor" name="nome" required />
-        </div>
-        <div class="form-group">
-          <label for="cnpj_fornecedor">CNPJ</label>
-          <input type="text" id="cnpj_fornecedor" name="cnpj" required />
-        </div>
-        <div class="form-group">
-          <label for="telefone_fornecedor">Telefone</label>
-          <input type="text" id="telefone_fornecedor" name="telefone" />
-        </div>
-        <div class="form-group">
-          <label for="email_fornecedor">Email</label>
-          <input type="email" id="email_fornecedor" name="email" />
-        </div>
-        <button type="submit">Adicionar Fornecedor</button>
-      </form>
-
-      <table contenteditable="true">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CNPJ</th>
-            <th>Telefone</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Construfácil</td>
-            <td>12.345.678/0001-90</td>
-            <td>11987654321</td>
-            <td>contato@construfacil.com</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </div>
+   
 
   <script src="script.js"></script>
 </body>
