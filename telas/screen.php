@@ -23,7 +23,18 @@
       <h2>Produtos</h2>
       <div class="form-group">
         <label for="produto_info">Escolha um produto</label>
-        <select id="produto_info" onchange="mostrarDetalhesProduto()"></select>
+        <select id="produto_info" onchange="mostrarDetalhesProduto()">
+          <option value="">Selecione um produto</option >
+          <?php
+          include './conexoes/fetch_produtos.php';
+          if ($results->num_rows > 0) {
+            while ($row = $results->fetch_assoc()){
+              echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+            }
+          }
+          ?>
+        
+      </select>
       </div>
       <table id="tabela_produto_info">
         <thead>

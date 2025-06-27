@@ -38,3 +38,6 @@
 --     data_saida DATETIME DEFAULT CURRENT_TIMESTAMP,
 --     FOREIGN KEY (id_produto) REFERENCES produtos(id_produto)
 -- );
+
+
+-- deixa isso quieto
